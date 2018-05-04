@@ -1,3 +1,3 @@
 # .dotfiles
 
-`bash <(curl -s https://raw.githubusercontent.com/mohitmayank/.dotfiles/master/bootstrap)`
+`bash <(curl -s https://raw.githubusercontent.com/rubimayank/.dotfiles/master/bootstrap)`
