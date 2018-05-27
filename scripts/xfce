@@ -7,34 +7,35 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 $DIR/ubuntu
 
-##setup home
-sudo chown "$ME":"$ME" /data
-rm -rf ~/Documents
-rm -rf ~/Downloads
-rm -rf ~/Music
-rm -rf ~/Pictures
-rm -rf ~/Videos
-
-mkdir -p /data/Documents
-mkdir -p /data/Downloads
-mkdir -p /data/Music
-mkdir -p /data/Pictures
-mkdir -p /data/Videos
-mkdir -p /data/bin
-mkdir -p /data/Movies
-mkdir -p /data/Recovery
-mkdir -p /data/tmp/scrot
-
-ln -s /data/Documents ~/Documents
-ln -s /data/Downloads ~/Downloads
-ln -s /data/Music ~/Music
-ln -s /data/Pictures ~/Pictures
-ln -s /data/Videos ~/Videos
-ln -s /data/bin ~/bin
-ln -s /data/Movies ~/Movies
-ln -s /data/Recovery ~/Recovery
-ln -s /data/tmp ~/tmp
-
+if [ -d /data ]; then
+	#setup home
+	sudo chown "$ME":"$ME" /data
+	rm -rf ~/Documents
+	rm -rf ~/Downloads
+	rm -rf ~/Music
+	rm -rf ~/Pictures
+	rm -rf ~/Videos
+	
+	mkdir -p /data/Documents
+	mkdir -p /data/Downloads
+	mkdir -p /data/Music
+	mkdir -p /data/Pictures
+	mkdir -p /data/Videos
+	mkdir -p /data/bin
+	mkdir -p /data/Movies
+	mkdir -p /data/Recovery
+	mkdir -p /data/tmp/scrot
+	
+	ln -s /data/Documents ~/Documents
+	ln -s /data/Downloads ~/Downloads
+	ln -s /data/Music ~/Music
+	ln -s /data/Pictures ~/Pictures
+	ln -s /data/Videos ~/Videos
+	ln -s /data/bin ~/bin
+	ln -s /data/Movies ~/Movies
+	ln -s /data/Recovery ~/Recovery
+	ln -s /data/tmp ~/tmp
+fi
 
 ##install ubuntu universe packages
 sudo apt-get install -y gparted python-pip
@@ -54,6 +55,13 @@ pip install rtv
 ##Remove packages
 sudo apt-get remove -y --purge thunderbird evince evince-common parole pidgin mousepad gnome-sudoku
 
+mkdir -p ~/.local/share/fonts
+
+for type in Bold Light Medium Regular Retina; do
+	wget -O ~/.local/share/fonts/FiraCode-${type}.ttf "https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true";
+done
+
+fc-cache -f
 
 ##install google chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/google-chrome-stable_current_amd64.deb
@@ -71,27 +79,27 @@ sudo sh -c 'wget -O - http://deb.opera.com/archive.key | apt-key add -'
 sudo add-apt-repository -y ppa:micahflee/ppa
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo add-apt-repository ppa:zeal-developers/ppa
+sudo add-apt-repository -y ppa:zeal-developers/ppa
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-sudo add-apt-repository ppa:twodopeshaggy/jarun
+sudo add-apt-repository -y ppa:twodopeshaggy/jarun
 
 
 sudo apt-get update
 
-sudo apt-get install googler
+sudo apt-get install -y googler
 
 ##vscode
-sudo apt-get install code 
+sudo apt-get install -y code 
 sudo sh -c 'echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf'
 sudo sysctl -p
 
 ##zeal offline docs
-sudo apt-get install zeal 
+sudo apt-get install -y zeal 
 
 ##libre office latest
-sudo apt install libreoffice
+sudo apt-get install -y  libreoffice
 
 ##install opera
 sudo apt-get install -y opera-stable
@@ -175,7 +183,7 @@ xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/commands/c
 xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/commands/custom/<Super>Q' --type string --set 'thunar'
 xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/commands/custom/<Super>slash' --type string --set 'touchtoggle'
 xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/commands/custom/<Shift>Print' --type string --set 'xfce4-screenshooter -r'
-xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/commands/custom/<Super>T' --type string --set 'xfce4-terminal --maximize'
+xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/commands/custom/<Super>T' --type string --set "xfce4-terminal --fullscreen"
 
 ##XFCE WM Shortcuts
 xfconf-query --create --channel xfce4-keyboard-shortcuts --property '/xfwm4/custom/<Super>Left' --type string --set 'tile_left_key'
