@@ -4,7 +4,7 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_AUTO_UPDATE="true"
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-export ZSH="/home/mohit/.oh-my-zsh"
+export ZSH="/home/rubi/.oh-my-zsh"
 export EDITOR='vim'
 export DISABLE_AUTO_TITLE='true'
 export KEYTIMEOUT=1
@@ -20,7 +20,7 @@ unsetopt beep
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git git-extras extract Composer common-aliases docker fasd httpie history npm redis-cli systemd web-search yarn debian history-substring-search vi-mode docker-compose gitignore chucknorris tmuxinator ubuntu
+  git git-extras extract composer common-aliases docker fasd httpie history npm redis-cli systemd web-search yarn debian history-substring-search vi-mode docker-compose gitignore chucknorris tmuxinator ubuntu
 )
 
 source $ZSH/oh-my-zsh.sh
