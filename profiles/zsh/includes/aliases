@@ -28,7 +28,7 @@ alias cd-='cd -'
 
 
 # {{{ Overrides
-alias du='du -sch .[!.]* * |sort -h'
+alias du='du -sch * |sort -h'
 alias df='df -h'
 alias reboot='sudo reboot'
 alias turnoff='sudo shutdown -P now'
