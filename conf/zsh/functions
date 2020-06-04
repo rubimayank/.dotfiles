@@ -1,0 +1,121 @@
+# {{{ Compress a file using tar and gz
+# and use it with the syntax compress <file1>
+function compress {
+  if [ -z "$1" ]; then
+    #display usage if no parameters given
+    echo "Usage: compress <path/file_name>"
+  else
+    NAME=$(basename $1)
+    tar -zcvf $NAME.tar.gz $1
+  fi
+}
+# }}}
+
+# {{{ clock - A bash clock that can run in your terminal window.
+clock ()
+{
+  while true;do clear;echo "===========";date +"%r";echo "===========";sleep 1;done
+}
+# }}}
+#
+
+n() {
+  mkdir -p ~/Documents/notes
+  if [ $# -eq 0 ]; then
+    $EDITOR ~/Documents/notes/index.txt
+  else
+    $EDITOR ~/Documents/notes/"$*".txt
+  fi
+}
+
+nls() {
+  ls -c ~/Documents/notes/ | grep "$*"
+}
+
+ta(){
+# ~/bin/tmux-myproject shell script
+# The Project name is also used as a session name (usually shorter)
+  if [ -z "$1" ]; then
+    SESSION_NAME=$(basename $(pwd))
+  else
+    SESSION_NAME=$1
+  fi
+
+  tmux has-session -t $SESSION_NAME 2>/dev/null
+  if [ "$?" -eq 1 ] ; then
+    echo "No Session found.  Creating and configuring."
+    tmux -u new-session -d -s $SESSION_NAME
+    tmux source-file ~/bin/tmux-${SESSION_NAME}.conf
+    popd
+  else
+    echo "Session found.  Connecting."
+  fi
+  tmux -u attach-session -t $SESSION_NAME
+}
+
+function sst () {/usr/bin/ssh -t $@ "tmux attach || tmux new";}
+
+function currentbranch() {
+  branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
+  branch_name="(unnamed branch)"     # detached HEAD
+  branch_name=${branch_name##refs/heads/}
+  echo $branch_name
+}
+
+function mastermerge() {
+  cbranch=$( currentbranch )
+  git push
+  git checkout master
+  git pull origin master
+  git merge $cbranch
+  git push origin master
+  git checkout $cbranch
+}
+
+function stagemerge() {
+  cbranch=$( currentbranch )
+  git checkout stage
+  git merge master
+  git push origin stage
+  git checkout $cbranch
+}
+
+function prodmerge() {
+  cbranch=$( currentbranch )
+  git checkout prod
+  git merge master
+  git push origin prod
+  git checkout $cbranch
+}
+
+function stagepush() {
+  mastermerge
+  stagemerge
+}
+
+function prodpush() {
+  stagepush
+  prodmerge
+}
+
+function gpurge() {
+  git remote prune origin
+  git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
+}
+
+# {{{ o - open a file using default program
+o() { xdg-open "$@" >/dev/null 2>&1 & }
+# }}}
+
+# {{{ gitlast - get files modified in last commit
+function gitlast {
+  COMMITID=$(git log --format="%H" -n 1)
+  git diff-tree --no-commit-id --name-only -r $COMMITID
+}
+# }}}
+#
+
+function auditweb {
+#lighthouse $1 --emulated-form-factor=desktop --chrome-flags="--headless" --output html --output-path /tmp/lighthousereport.html --no-enable-error-reporting && firefox /tmp/lighthousereport.html
+lighthouse --emulated-form-factor=desktop --chrome-flags="--headless" --output html --output-path /tmp/lighthousereport.html --no-enable-error-reporting --view $1
+}
