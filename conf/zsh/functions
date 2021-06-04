@@ -36,7 +36,7 @@ ta(){
 # ~/bin/tmux-myproject shell script
 # The Project name is also used as a session name (usually shorter)
   if [ -z "$1" ]; then
-    SESSION_NAME=$(basename $(pwd))
+    SESSION_NAME=rubi
   else
     SESSION_NAME=$1
   fi
@@ -45,8 +45,6 @@ ta(){
   if [ "$?" -eq 1 ] ; then
     echo "No Session found.  Creating and configuring."
     tmux -u new-session -d -s $SESSION_NAME
-    tmux source-file ~/bin/tmux-${SESSION_NAME}.conf
-    popd
   else
     echo "Session found.  Connecting."
   fi

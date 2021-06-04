@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+
+brew install vim tmux wget tree htop p7zip unrar editorconfig unzip git-extras nnn httpie fortune cowsay lolcat
+brew tap homebrew/cask-fonts
+brew cask install font-inconsolata-nerd-font
+
+brew install node@12
+sudo npm i -g speed-test
+brew install yarn
+
+echo "https://github.com/nicolashery/mac-dev-setup"
+
+echo "install python"
+
+$DIR/profiles/zsh
+$DIR/profiles/vim
+$DIR/profiles/tmux
+$DIR/profiles/git
+
